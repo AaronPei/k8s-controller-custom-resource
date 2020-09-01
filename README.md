@@ -11,7 +11,7 @@ An example of a custom Kubernetes controller that's only purpose is to watch for
 Clone repo:
 
 ```
-$ git clone https://github.com/resouer/k8s-controller-custom-resource
+$ git clone https://github.com/AaronPei/k8s-controller-custom-resource
 $ cd k8s-controller-custom-resource
 ```
 
@@ -48,3 +48,19 @@ $ kubectl apply -f example/example-network.yaml
 CURD the Network API instance, and check the logs of controller. 
 
 Enjoy!
+
+
+```sh
+# 使用 Kubernetes 提供的代码生成工具，为上面定义的 Network 资源类型自动 生成 clientset、informer 和 lister
+# 代码生成的工作目录，也就是我们的项目路径
+$ ROOT_PACKAGE="github.com/resouer/k8s-controller-custom-resource"
+# API Group
+$ CUSTOM_RESOURCE_NAME="samplecrd"
+# API Version
+$ CUSTOM_RESOURCE_VERSION="v1"
+# 安装 k8s.io/code-generator
+$ go get -u k8s.io/code-generator/...
+$ cd $GOPATH/src/k8s.io/code-generator 11
+# 执行代码自动生成，其中 pkg/client 是生成目标目录，pkg/apis 是类型定义目录
+$ ./generate-groups.sh all "$ROOT_PACKAGE/pkg/client" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_VERSION"
+```
